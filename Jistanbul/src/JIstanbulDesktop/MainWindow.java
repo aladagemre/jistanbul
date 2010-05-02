@@ -119,6 +119,8 @@ public class MainWindow extends javax.swing.JFrame {
     private void fetchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fetchButtonActionPerformed
         Line line = conn.downloadLine(lineCode.getText());
         ArrayList<ArrayList<Time>> times = line.getTimetable();
+        String from = line.getFrom();
+        String to = line.getTo();
 
 
         tableModel = new DefaultTableModel();
