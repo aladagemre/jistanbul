@@ -23,7 +23,7 @@ public class JIstanbul {
         while (true){
             System.out.println("Enter the line code:");
             code = sc.next();
-            conn.downloadLine(code);
+            //conn.downloadLine(code);
         }
     }
     public static void main(String[] args) {

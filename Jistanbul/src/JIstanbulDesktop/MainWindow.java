@@ -117,25 +117,30 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_lineCodeActionPerformed
 
     private void fetchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fetchButtonActionPerformed
-        Line line = conn.downloadLine(lineCode.getText());
-        ArrayList<ArrayList<Time>> times = line.getTimetable();
-        String from = line.getFrom();
-        String to = line.getTo();
+        try {
+            Line line = conn.downloadLine(lineCode.getText());
+            ArrayList<ArrayList<Time>> times = line.getTimetable();
+            String from = line.getFrom();
+            String to = line.getTo();
 
 
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("A - H.içi", times.get(0).toArray());
-        tableModel.addColumn("B - H.içi", times.get(1).toArray());
-        tableModel.addColumn("A - Cumartesi", times.get(2).toArray());
-        tableModel.addColumn("B - Cumartesi", times.get(3).toArray());
-        tableModel.addColumn("A - Pazar", times.get(4).toArray());
-        tableModel.addColumn("B - Pazar", times.get(5).toArray());
+            tableModel = new DefaultTableModel();
+            tableModel.addColumn("A - H.içi", times.get(0).toArray());
+            tableModel.addColumn("B - H.içi", times.get(1).toArray());
+            tableModel.addColumn("A - Cumartesi", times.get(2).toArray());
+            tableModel.addColumn("B - Cumartesi", times.get(3).toArray());
+            tableModel.addColumn("A - Pazar", times.get(4).toArray());
+            tableModel.addColumn("B - Pazar", times.get(5).toArray());
 
-        //ArrayList<Time[]> rows = line.getRowBasedTimeTable();
-        //System.out.println("Inserting"+ rows.get(0));
-        //tableModel.insertRow(tableModel.getRowCount(), rows.get(0));
-        
-        timetable.setModel(tableModel);
+            //ArrayList<Time[]> rows = line.getRowBasedTimeTable();
+            //System.out.println("Inserting"+ rows.get(0));
+            //tableModel.insertRow(tableModel.getRowCount(), rows.get(0));
+
+            timetable.setModel(tableModel);
+        }
+        catch (Exception e){
+            System.err.println(e);
+        }
     }//GEN-LAST:event_fetchButtonActionPerformed
 
     /**
