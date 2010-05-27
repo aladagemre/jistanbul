@@ -5,7 +5,6 @@
 
 package JIstanbulDesktop;
 
-import iett.Connector;
 import java.util.Scanner;
 
 /**

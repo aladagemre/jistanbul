@@ -11,11 +11,11 @@
 
 package JIstanbulDesktop;
 
-import iett.Connector;
 import iett.Line;
-import iett.Time;
-import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import utils.NoSuchLineException;
+import utils.TimeList;
 
 /**
  *
@@ -52,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
         timetable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("JIstanbul");
 
         jLabel1.setText("Hat Kodu:");
 
@@ -94,7 +95,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fetchButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,20 +119,36 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void fetchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fetchButtonActionPerformed
         try {
-            Line line = conn.downloadLine(lineCode.getText());
-            ArrayList<ArrayList<Time>> times = line.getTimetable();
+            Line line;
+            System.out.println("Downloading");
+            try {
+                line = conn.downloadLine(lineCode.getText());
+            }
+            catch (NoSuchLineException e){
+                JOptionPane.showMessageDialog(null, e.getError());
+                return;
+            }
+            catch (Exception e){
+                System.err.println(e);
+                return;
+            }
+            
+            System.out.println("Downloaded line");
+            TimeList[] times = line.getTimetable();
+            System.out.println("Got timetable");
+            
             String from = line.getFrom();
             String to = line.getTo();
 
 
             tableModel = new DefaultTableModel();
-            tableModel.addColumn("A - H.içi", times.get(0).toArray());
-            tableModel.addColumn("B - H.içi", times.get(1).toArray());
-            tableModel.addColumn("A - Cumartesi", times.get(2).toArray());
-            tableModel.addColumn("B - Cumartesi", times.get(3).toArray());
-            tableModel.addColumn("A - Pazar", times.get(4).toArray());
-            tableModel.addColumn("B - Pazar", times.get(5).toArray());
-
+            tableModel.addColumn(from + " - H.içi", times[0].toArray());
+            tableModel.addColumn(to + " - H.içi", times[1].toArray());
+            tableModel.addColumn(from + " - Cumartesi", times[2].toArray());
+            tableModel.addColumn(to + " - Cumartesi", times[3].toArray());
+            tableModel.addColumn(from + " - Pazar", times[4].toArray());
+            tableModel.addColumn(to + " - Pazar", times[5].toArray());
+            System.out.println("Added coolumns");
             //ArrayList<Time[]> rows = line.getRowBasedTimeTable();
             //System.out.println("Inserting"+ rows.get(0));
             //tableModel.insertRow(tableModel.getRowCount(), rows.get(0));

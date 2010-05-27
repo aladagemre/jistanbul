@@ -5,7 +5,6 @@
 
 package utils;
 import iett.Time;
-import java.lang.IndexOutOfBoundsException;
 
 /**
  *
@@ -37,11 +36,13 @@ public class TimeList {
         maxSize = array.length;
     }
 
+    public Time[] toArray(){
+        return elements;
+    }
     public int size(){
         return numElements;
     }
     public void add(Time element){
-        System.out.println("maxxsize=" + maxSize);
         if (numElements < maxSize){
             elements[numElements++] = element;
         }
@@ -65,8 +66,6 @@ public class TimeList {
             return elements[index];
         }
         else{
-            System.out.println("Index requested: " + index);
-            System.out.println("numElements: " + numElements);
             throw new IndexOutOfBoundsException();
         }
             

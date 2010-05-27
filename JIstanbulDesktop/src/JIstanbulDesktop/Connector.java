@@ -1,11 +1,14 @@
-package iett;
+package JIstanbulDesktop;
 
+import iett.Line;
+import iett.Parser;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
+import utils.NoSuchLineException;
 
 /**
  *
@@ -29,24 +32,33 @@ public class Connector {
          *  We flush (clear) the parser information
          *  We return the Line object.
          */
-        parser.setCode(code);
+        try {
+            parser.setCode(code);
+
+            downloadLine(1, "G", code);
+            downloadLine(1, "D", code);
+            downloadLine(2, "G", code);
+            downloadLine(2, "D", code);
+            downloadLine(3, "G", code);
+            downloadLine(3, "D", code);
+
+            Line line = parser.getLine();
+            parser.flush();
+
+            return line;
+        }
+        catch (Exception e){
+            System.err.println(e);
+            throw e;
+        }
+
         
-        downloadLine(1, "G", code);
-        downloadLine(1, "D", code);
-        downloadLine(2, "G", code);
-        downloadLine(2, "D", code);
-        downloadLine(3, "G", code);
-        downloadLine(3, "D", code);
         
-        Line line = parser.getLine();
-        parser.flush();
-        
-        return line;
         
     }
 
 
-    public void downloadLine(int day, String direction, String code) throws Exception{
+    public void downloadLine(int day, String direction, String code) throws NoSuchLineException, IOException {
         /*
          * Downloads a specific line/day/direction.
          * Performs a GET request to the IETT Wap page.
@@ -58,6 +70,7 @@ public class Connector {
         String data = prepareGetData(day, direction, code);
         String timeLine = requestTimeLine(String.format("http://wap.iett.gov.tr/ht1.php?%s", data));
         parser.parseTimes(timeLine, direction);
+        
 
     }
 
@@ -65,15 +78,15 @@ public class Connector {
         /**
          * Prepares URL postfix for the request parameters.
          */
-        String data = URLEncoder.encode("gun", "ISO-8859-9") + "=" + URLEncoder.encode(Integer.toString(day), "ISO-8859-9");
-        data += "&" + URLEncoder.encode("bas", "ISO-8859-9") + "=" + URLEncoder.encode(direction, "ISO-8859-9");
-        data += "&" + URLEncoder.encode("hk", "ISO-8859-9") + "=" + URLEncoder.encode(code, "ISO-8859-9");
-        data += "&" + URLEncoder.encode("ARA", "ISO-8859-9") + "=" + URLEncoder.encode("ARA", "ISO-8859-9");
+        String data = encodeString("gun") + "=" + encodeString(Integer.toString(day));
+        data += "&" + encodeString("bas") + "=" + encodeString(direction);
+        data += "&" + encodeString("hk") + "=" + encodeString(code);
+        data += "&" + encodeString("ARA") + "=" + encodeString("ARA");
 
         return data;
     }
 
-    private String requestTimeLine(String urlString) throws Exception {
+    private String requestTimeLine(String urlString) throws IOException {
         /**
          * Downloads the given URL and returns the line with the times.
          */
@@ -93,6 +106,14 @@ public class Connector {
         return null;
     }
 
+    private String encodeString(String input){
+        /**
+         * Encodes given string in encoding ISO-8859-9
+         */
+        input = input.replace("ı", "%FD").replace("ö", "%F6").replace("ü", "%FC").replace("ş", "%FE").replace("ğ", "%F0").replace("ç", "%E7");
+        input = input.replace("İ", "%DD").replace("Ö", "%D6").replace("Ü", "%DC").replace("Ş", "%DE").replace("Ğ", "%D0").replace("Ç", "%C7");
+        return input;
+    }
     public static void main(String[] args){
         Connector c = new Connector();
         

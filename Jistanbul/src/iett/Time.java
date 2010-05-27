@@ -5,7 +5,7 @@
 
 package iett;
 
-import java.util.regex.Pattern;
+import utils.StringOperations;
 
 /**
  *
@@ -20,9 +20,11 @@ public class Time {
          * Splits the given text according to ":" and sets itself up
          */
         // 19:05
-        String[] array = Pattern.compile(":").split(text, 0);
-        hour = Integer.parseInt(array[0]);
-        minute = Integer.parseInt(array[1]);
+        String[] array = StringOperations.split(text, ":");
+        int delimiterIndex = text.indexOf(":");
+        
+        hour = Integer.parseInt(text.substring(0,delimiterIndex));
+        minute = Integer.parseInt(text.substring(delimiterIndex+1));
     }
     /**
      * @return the hour
@@ -53,7 +55,13 @@ public class Time {
     }
 
     public String toString(){
-        return String.format("%02d:%02d", hour, minute);
+        String result="";
+        if (hour < 9) result += "0";
+        result += hour;
+        result += ":";
+        if (minute < 9) result += "0";
+        result += minute;
+        return result;
     }
 
 }
