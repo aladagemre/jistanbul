@@ -15,13 +15,14 @@ import utils.NoSuchLineException;
  * @author emre
  */
 public class Connector {
+
     private Parser parser;
-    
-    public Connector(){
+
+    public Connector() {
         parser = new Parser();
     }
-    
-    public Line downloadLine(String code) throws Exception{
+
+    public Line downloadLine(String code) throws Exception {
         /*
          * Downloads the line with the given code and returns the Line object.
          * How does it do that:
@@ -46,17 +47,11 @@ public class Connector {
             parser.flush();
 
             return line;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
             throw e;
         }
-
-        
-        
-        
     }
-
 
     public void downloadLine(int day, String direction, String code) throws NoSuchLineException, IOException {
         /*
@@ -70,8 +65,6 @@ public class Connector {
         String data = prepareGetData(day, direction, code);
         String timeLine = requestTimeLine(String.format("http://wap.iett.gov.tr/ht1.php?%s", data));
         parser.parseTimes(timeLine, direction);
-        
-
     }
 
     private String prepareGetData(int day, String direction, String code) throws UnsupportedEncodingException {
@@ -97,7 +90,7 @@ public class Connector {
         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String textLine;
         while ((textLine = rd.readLine()) != null) {
-            if (textLine.startsWith("&nbsp;&nbsp;&nbsp;")){
+            if (textLine.startsWith("&nbsp;&nbsp;&nbsp;")) {
                 return textLine;
             }
         }
@@ -106,7 +99,7 @@ public class Connector {
         return null;
     }
 
-    private String encodeString(String input){
+    private String encodeString(String input) {
         /**
          * Encodes given string in encoding ISO-8859-9
          */
@@ -114,8 +107,9 @@ public class Connector {
         input = input.replace("İ", "%DD").replace("Ö", "%D6").replace("Ü", "%DC").replace("Ş", "%DE").replace("Ğ", "%D0").replace("Ç", "%C7");
         return input;
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         Connector c = new Connector();
-        
+
     }
 }

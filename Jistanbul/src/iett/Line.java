@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package iett;
 
 import utils.TimeList;
@@ -12,11 +11,12 @@ import utils.TimeList;
  * @author emre
  */
 public class Line {
+
     private String code;
     private String from, to;
     private TimeList[] timetable;
-    
-    public Line(String code){
+
+    public Line(String code) {
         this.code = code;
     }
 
@@ -61,9 +61,4 @@ public class Line {
     public void setTo(String to) {
         this.to = to;
     }
-    
-
-    
-
-
 }
